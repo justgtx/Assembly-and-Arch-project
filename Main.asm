@@ -12,8 +12,24 @@ ExitProcess PROTO, dwExitCode:DWORD
  ;advanced word pool (8 letters)
  advancedWords BYTE "ASSEMBLY", "PROGRAMS", "OVERFLOW", "SEGMENTZ", "REGISTER", "COMPUTER", "ABSOLUTE", "GRAPHICS", "QUESTION", "ELEPHANT"
 
+ wordLength BYTE 4		;word length for the game
+ wordCount BYTE 4		;amount of words
+ attemptsLeft BYTE 5	;attempts left in game
+ tarOffset DWORD ?		;memory offset for randomly chosen password.
+
+
 .code
 main PROC
+
+DisplayStartingMenu:
+;  set screen to black, text to green
+;  would be cool if these could come on the screen incrementally like someone is typing them out into the terminal.
+;  display options as follows:
+;1. Beginner (4-letter words)
+;2. Intermediate (6-letter words)
+;3. Advanced (8-letter words)
+
+call ReadChar	;returned value is in AL.
 
 
 
