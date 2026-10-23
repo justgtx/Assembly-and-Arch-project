@@ -106,17 +106,24 @@ InitGame PROC
    
    ;Iterate for the 1, 2, ... N for the row values
    mov ecx, GRID_SIZE
+   mov bl, 1
+   mov dl,2 ;col
+   mov dh,3 ;row
    RowOuterLoop:
+    call Gotoxy
+	mov al, bl
+    
 
+    
     ;Iterate through the columns, and initially place dots.
-
 	push ecx
     RowInnerLoop:
 
 
-
+	add dl, 2
 	loop RowInnerLoop
 
+	mov dl, 2
 	pop ecx
    loop RowOuterLoop
 
