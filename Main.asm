@@ -28,27 +28,6 @@ ExitProcess PROTO, dwExitCode:DWORD
 .code
 main PROC
 
-DisplayStartingMenu:
-;  set screen to black, text to green
-;  would be cool if these could come on the screen incrementally like someone is typing them out into the terminal.
-call Clrscr
-mov eax,green+(black*16)
-call SetTextColor
-
-mov edx, OFFSET initPrompt
-call WriteString
-;  display options as follows:
-;1. Beginner (4-letter words)
-;2. Intermediate (6-letter words)
-;3. Advanced (8-letter words)
-
-
-
-
-call ReadChar	;returned value is in AL.
-
-
-
 INVOKE ExitProcess,0
 main ENDP
 END main
