@@ -16,6 +16,15 @@ MAX_MISSES    EQU 3
 	; Board state: 0 is empty, 1 is hidden target, 2 is revealed/hit target, 3 is a missed guess
 	board BYTE TOTAL_CELLS DUP(?)
 
+	;Game variables
+	targetsLeft BYTE TOTAL_TARGETS
+	currMisses BYTE 0
+
+	;Space for UI Prompts
+
+	inputRow	DWORD ?
+	inputCol	Dword ?
+
 .code
 main PROC
 
