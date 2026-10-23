@@ -76,8 +76,10 @@ InitGame PROC
   cmp board[ebx], 1
   je GenRandNum				;'reroll' a new number if board spot is equal to 1
 
+  mov board[ebx], 1			;place target in spot
 
 
+  pop ecx					;restore outer loop counter
   loop PlaceTargetLoop		;loop until all targets are placed
 
 
