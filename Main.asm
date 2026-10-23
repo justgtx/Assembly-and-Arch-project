@@ -63,6 +63,23 @@ InitGame PROC
   inc esi
   loop ClearBoardLoop
 
+  movzx ecx, targetsLeft	;loop counter for targets to be placed
+
+ PlaceTargetLoop:
+  push ecx
+ 
+ GenRandNum:
+  mov eax, TOTAL_CELLS
+  call RandomRange			;eax holds a random number from 0-TOTAL_CELLS - 1
+
+  mov ebx, eax
+  cmp board[ebx], 1
+  je GenRandNum				;'reroll' a new number if board spot is equal to 1
+
+
+
+  loop PlaceTargetLoop		;loop until all targets are placed
+
 
 InitGame ENDP
 END main
