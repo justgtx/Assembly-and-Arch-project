@@ -86,6 +86,7 @@ InitGame PROC
    push ecx
    push edx
    push ebx
+   push eax
    ;display column numbers 1 - GRID_SIZE
    mov ecx, GRID_SIZE
    mov dl, 5  ;col test val
@@ -100,11 +101,26 @@ InitGame PROC
 	mov al, ' '
 	call WriteChar
 	pop eax
-
 	inc bl
-
 	loop ColumnLoop
+   
+   ;Iterate for the 1, 2, ... N for the row values
+   mov ecx, GRID_SIZE
+   RowOuterLoop:
 
+    ;Iterate through the columns, and initially place dots.
+
+	push ecx
+    RowInnerLoop:
+
+
+
+	loop RowInnerLoop
+
+	pop ecx
+   loop RowOuterLoop
+
+   pop eax
    pop ebx
    pop edx
    pop ecx
