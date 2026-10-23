@@ -75,12 +75,26 @@ InitGame PROC
   mov ebx, eax
   cmp board[ebx], 1
   je GenRandNum				;'reroll' a new number if board spot is equal to 1
-
   mov board[ebx], 1			;place target in spot
-
 
   pop ecx					;restore outer loop counter
   loop PlaceTargetLoop		;loop until all targets are placed
+
+  ;Display board for 3 second
+  InitDisplay:
+   push ecx
+   push edx
+   ;display column numbers 1 - GRID_SIZE
+   mov ecx, GRID_SIZE
+   mov edx, 1
+   ColumnLoop:
+    
+
+	jmp ColumnLoop
+
+
+
+   pop ecx
 
 
 InitGame ENDP
