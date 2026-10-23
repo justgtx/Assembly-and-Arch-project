@@ -21,12 +21,28 @@ MAX_MISSES    EQU 3
 	currMisses BYTE 0
 
 	;Space for UI Prompts
+	
+	;prompts set up this way so they are dynamic.
+	promptRow	BYTE "Enter Row (1-",0
+	promptCol	BYTE "Enter Column (1-",0
+	promptCloseBracket	BYTE "): ",0
 
 	inputRow	DWORD ?
 	inputCol	Dword ?
 
+
 .code
 main PROC
+
+ GameLoop:
+
+
+
+
+  jmp GameLoop
+ 
+ 
+
 
 INVOKE ExitProcess,0
 main ENDP
