@@ -115,8 +115,10 @@ InitGame PROC
 	add al, '0'
 	call WriteChar
 	push eax
-	mov ax, ': '
-	call WriteString
+	mov al, ':'
+	call WriteChar
+	mov al, ' '
+	call WriteChar
 	pop eax
     
     ;Iterate through the columns, and initially place dots.
