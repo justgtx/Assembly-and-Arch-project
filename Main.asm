@@ -82,18 +82,27 @@ InitGame PROC
 
   ;Display board for 3 second
   InitDisplay:
+   call Clrscr
    push ecx
    push edx
+   push ebx
    ;display column numbers 1 - GRID_SIZE
    mov ecx, GRID_SIZE
-   mov edx, 1
+   mov dl, 5  ;col test val
+   mov dh, 2   ;row text val
+   call Gotoxy
+   mov bl, 1
    ColumnLoop:
-    
+    mov al, bl
+	add al, '0'
+	call WriteChar
 
-	jmp ColumnLoop
+	inc bl
 
+	loop ColumnLoop
 
-
+   pop ebx
+   pop edx
    pop ecx
 
 
