@@ -33,11 +33,18 @@ MAX_MISSES    EQU 3
 
 .code
 main PROC
+ ;game initalization procedures to be built
+					;call promptDifficulty		;To be added later
+ call RandomizeGrid		;seed the grid with random values
+ call initGrid				;place the randomized values on the grid
+ call ShowPeekOfScreen		;show full displayed board for a few seconds
 
+ ;GameLoop will run continuously until the game ends.
  GameLoop:
-
-
-
+  call CheckWinOrLoss		;Check for exit state, exit if true
+  call RenderBoard			;Render the updated board after last user input
+  call GetPlayerInput		;prompt and validate the user's entry
+  call EvalGuess			;evaluate the user's entry
 
   jmp GameLoop
  
