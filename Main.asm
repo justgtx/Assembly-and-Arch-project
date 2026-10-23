@@ -94,8 +94,12 @@ InitGame PROC
    mov bl, 1
    ColumnLoop:
     mov al, bl
-	add al, '0'
+	add al, '0'	;convert number to ASCII
 	call WriteChar
+	push eax
+	mov al, ' '
+	call WriteChar
+	pop eax
 
 	inc bl
 
