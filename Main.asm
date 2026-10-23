@@ -124,10 +124,17 @@ InitGame PROC
     ;Iterate through the columns, and initially place dots.
 	push ecx ;push ecx so it can be saved to iterate after inner loop
 	mov ecx, GRID_SIZE ;GRID_SIZE is row iterator
+	
+	mov dl, 5
     RowInnerLoop:
-
-
+	
+	call Gotoxy
+	mov al, '.'
+	call WriteChar
+	mov al, ' '
+	call WriteChar
 	add dl, 2
+
 	loop RowInnerLoop
 
 	mov dl, 2
