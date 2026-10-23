@@ -58,7 +58,7 @@ InitGame PROC
  xor esi, esi			;set index tracker to 0.
  
  ClearBoardLoop:
-  mov eax, OFFSET board
+  ;mov eax, OFFSET board
   mov board[esi], 0
   inc esi
   loop ClearBoardLoop
@@ -87,6 +87,8 @@ InitGame PROC
    push edx
    push ebx
    push eax
+   push edi
+
    ;display column numbers 1 - GRID_SIZE
    mov ecx, GRID_SIZE
    mov dl, 5  ;col test val
@@ -109,7 +111,7 @@ InitGame PROC
    mov bl, 1
    mov dl,2 ;col
    mov dh,3 ;row
-   mov edi, OFFSET board
+   mov edi, 0
    RowOuterLoop:
     call Gotoxy
 	mov al, bl
@@ -127,7 +129,7 @@ InitGame PROC
 	mov ecx, GRID_SIZE ;GRID_SIZE is row iterator
 	
 	mov dl, 5
-    RowInnerLoop:
+    RowInnerLoop: 
 	 call Gotoxy
 
 	 cmp board[edi], 1
@@ -139,13 +141,14 @@ InitGame PROC
 	 jmp NoDisplayTarget
 
 	 DisplayTarget:
-	  mov al, 
-
+	  mov al, '*'
+	  call WriteChar
 
 	 NoDisplayTarget:
 	 mov al, ' '
 	 call WriteChar 
 	 add dl, 2
+	 inc edi
 	 loop RowInnerLoop
 
 	mov dl, 2
@@ -153,7 +156,8 @@ InitGame PROC
 	inc dh ;increment terminal row value
 	pop ecx ;pop ecx so it can be used to loop again
    loop RowOuterLoop
-
+   
+   pop edi
    pop eax
    pop ebx
    pop edx
