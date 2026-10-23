@@ -1,12 +1,15 @@
 ; main module for the game contest
 ; aim to add Entry Point, and core game loop from this file.
+
+;https://csc.csudh.edu/mmccullough/asm/help/index.html
+;Condensed source of all Irvine32 Library Procedure Calls
 INCLUDE Irvine32.inc
 ;	have another INCLUDE Prompts.inc for the prompts needing user input, to remove Main.asm clutter?
 .386
 .stack 4096
 ExitProcess PROTO, dwExitCode:DWORD
 	;use EQU directive for dynamic scaling
-GRID_SIZE     EQU 5		;Scalable
+GRID_SIZE     EQU 7 	;Scalable
 TOTAL_CELLS   EQU GRID_SIZE * GRID_SIZE
 TOTAL_TARGETS EQU 10	;Scalable as well
 MAX_MISSES    EQU 3
@@ -33,6 +36,7 @@ MAX_MISSES    EQU 3
 
 .code
 main PROC
+call Randomize		;fully randomize the range for later
  ;game initalization procedures to be built
 					;call promptDifficulty		;To be added later
  ;call RandomizeGrid		;seed the grid with random values
@@ -157,6 +161,8 @@ InitGame PROC
 	pop ecx ;pop ecx so it can be used to loop again
    loop RowOuterLoop
    
+   mov eax, 3000	;3 second delay
+   call Delay
    pop edi
    pop eax
    pop ebx
