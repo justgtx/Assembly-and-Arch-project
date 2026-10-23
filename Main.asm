@@ -109,6 +109,7 @@ InitGame PROC
    mov bl, 1
    mov dl,2 ;col
    mov dh,3 ;row
+   mov edi, OFFSET board
    RowOuterLoop:
     call Gotoxy
 	mov al, bl
@@ -127,14 +128,23 @@ InitGame PROC
 	
 	mov dl, 5
     RowInnerLoop:
-	
+	cmp board[edi], 1
+	je DisplayTarget
+
 	call Gotoxy
 	mov al, '.'
 	call WriteChar
 	mov al, ' '
-	call WriteChar
-	add dl, 2
+	call WriteChar 
+	
+	jmp NoDisplayTarget
 
+	DisplayTarget:
+
+
+
+	NoDisplayTarget:
+	add dl, 2
 	loop RowInnerLoop
 
 	mov dl, 2
