@@ -5,8 +5,16 @@ INCLUDE Irvine32.inc
 .386
 .stack 4096
 ExitProcess PROTO, dwExitCode:DWORD
-.data
+	;use EQU directive for dynamic scaling
+GRID_SIZE     EQU 5		;Scalable
+TOTAL_CELLS   EQU GRID_SIZE * GRID_SIZE
+TOTAL_TARGETS EQU 10	;Scalable as well
+MAX_MISSES    EQU 3
 
+
+.data
+	; Board state: 0 is empty, 1 is hidden target, 2 is revealed/hit target, 3 is a missed guess
+	board BYTE TOTAL_CELLS DUP(?)
 
 .code
 main PROC
@@ -14,4 +22,3 @@ main PROC
 INVOKE ExitProcess,0
 main ENDP
 END main
-
