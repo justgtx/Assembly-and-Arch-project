@@ -112,11 +112,16 @@ InitGame PROC
    RowOuterLoop:
     call Gotoxy
 	mov al, bl
-    
-
+	add al, '0'
+	call WriteChar
+	push eax
+	mov ax, ': '
+	call WriteString
+	pop eax
     
     ;Iterate through the columns, and initially place dots.
-	push ecx
+	push ecx ;push ecx so it can be saved to iterate after inner loop
+	mov ecx, GRID_SIZE ;GRID_SIZE is row iterator
     RowInnerLoop:
 
 
@@ -124,7 +129,9 @@ InitGame PROC
 	loop RowInnerLoop
 
 	mov dl, 2
-	pop ecx
+	inc bl ;increment row counter
+	inc dh ;increment terminal row value
+	pop ecx ;pop ecx so it can be used to loop again
    loop RowOuterLoop
 
    pop eax
@@ -132,6 +139,6 @@ InitGame PROC
    pop edx
    pop ecx
 
-
+   ret
 InitGame ENDP
 END main
