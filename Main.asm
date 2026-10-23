@@ -35,22 +35,34 @@ MAX_MISSES    EQU 3
 main PROC
  ;game initalization procedures to be built
 					;call promptDifficulty		;To be added later
- call RandomizeGrid		;seed the grid with random values
- call initGrid				;place the randomized values on the grid
- call ShowPeekOfScreen		;show full displayed board for a few seconds
+ ;call RandomizeGrid		;seed the grid with random values
+ call InitGame				;place the randomized values on the grid
+ ;call ShowPeekOfScreen		;show full displayed board for a few seconds
 
  ;GameLoop will run continuously until the game ends.
  GameLoop:
-  call CheckWinOrLoss		;Check for exit state, exit if true
-  call RenderBoard			;Render the updated board after last user input
-  call GetPlayerInput		;prompt and validate the user's entry
-  call EvalGuess			;evaluate the user's entry
+  ;call CheckWinOrLoss		;Check for exit state, exit if true
+  ;call RenderBoard			;Render the updated board after last user input
+  ;call GetPlayerInput		;prompt and validate the user's entry
+  ;call EvalGuess			;evaluate the user's entry
 
   jmp GameLoop
  
  
-
-
 INVOKE ExitProcess,0
 main ENDP
+
+;Seed random numbers into the NxN grid
+InitGame PROC
+ mov ecx, TOTAL_CELLS	;loop for every cell
+ xor esi, esi			;set index tracker to 0.
+ 
+ ClearBoardLoop:
+  mov eax, OFFSET board
+  mov board[esi], 0
+  inc esi
+  loop ClearBoardLoop
+
+
+InitGame ENDP
 END main
