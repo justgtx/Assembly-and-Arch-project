@@ -128,24 +128,25 @@ InitGame PROC
 	
 	mov dl, 5
     RowInnerLoop:
-	cmp board[edi], 1
-	je DisplayTarget
+	 call Gotoxy
 
-	call Gotoxy
-	mov al, '.'
-	call WriteChar
-	mov al, ' '
-	call WriteChar 
+	 cmp board[edi], 1
+	 je DisplayTarget
+
+	 mov al, '.'
+	 call WriteChar
 	
-	jmp NoDisplayTarget
+	 jmp NoDisplayTarget
 
-	DisplayTarget:
+	 DisplayTarget:
+	  mov al, 
 
 
-
-	NoDisplayTarget:
-	add dl, 2
-	loop RowInnerLoop
+	 NoDisplayTarget:
+	 mov al, ' '
+	 call WriteChar 
+	 add dl, 2
+	 loop RowInnerLoop
 
 	mov dl, 2
 	inc bl ;increment row counter
