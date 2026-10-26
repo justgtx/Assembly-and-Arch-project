@@ -95,9 +95,18 @@ push ebx
  mov dl, 2 ;col
  mov dh, 3 ;row
  mov bl, 1
+ mov edi, 0
  RowOuterLoop:
    
    RowInnerLoop:
+	;Game Logic for "0" value
+
+	;Game Logic for "1" value
+	
+	;Game Logic for "2" value
+
+	;Game Logic for "3" value
+
 
    loop RowInnerLoop
 
