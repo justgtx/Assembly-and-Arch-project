@@ -24,7 +24,7 @@ MAX_MISSES    EQU 3
 	currMisses BYTE 0
 
 	;Space for UI Prompts
-	hint_ct BYTE 2 ; only 2 hints allowed per game
+	
 	;prompts set up this way so they are dynamic.
 	promptRow	BYTE "Enter Row (1-",0
 	promptCol	BYTE "Enter Column (1-",0
@@ -95,8 +95,8 @@ InitGame PROC
 
    ;display column numbers 1 - GRID_SIZE
    mov ecx, GRID_SIZE
-   mov dl, 40  ;col test val
-   mov dh, 12   ;row text val
+   mov dl, 5  ;col test val
+   mov dh, 2   ;row text val
    call Gotoxy
    mov bl, 1
    ColumnLoop:
@@ -113,8 +113,8 @@ InitGame PROC
    ;Iterate for the 1, 2, ... N for the row values
    mov ecx, GRID_SIZE
    mov bl, 1
-   mov dl,40 ;col
-   mov dh,12 ;row
+   mov dl,2 ;col
+   mov dh,3 ;row
    mov edi, 0
    RowOuterLoop:
     call Gotoxy
@@ -132,7 +132,7 @@ InitGame PROC
 	push ecx ;push ecx so it can be saved to iterate after inner loop
 	mov ecx, GRID_SIZE ;GRID_SIZE is row iterator
 	
-	mov dl, 40 ;col
+	mov dl, 5
     RowInnerLoop: 
 	 call Gotoxy
 
@@ -170,33 +170,5 @@ InitGame PROC
    pop ecx
 
    ret
-
 InitGame ENDP
-GameLoop PROC
-    ;Check for win/loss condition
-   ; call CheckWinOrLoss
-    ;Render the board
-    ;call RenderBoard
-    ;Get player input
-   ; call GetPlayerInput
-    ;Evaluate the guess
-   ; call EvalGuess
-
-    jmp GameLoop
-        jmp hint:
-        ;display hint for 1.5 seconds one and off 3 times
-        mov ecx, 3
-    hintLoop:
-        call Clrscr
-        mov dl, 40
-        mov dh, 12
-        call Gotoxy
-        mov edx, OFFSET promptHint
-        call WriteString
-        mov eax, 1500	;1.5 second delay
-        call Delay
-        dec ecx
-        jnz hintLoop
-        ret
-GameLoop ENDP
 END main
