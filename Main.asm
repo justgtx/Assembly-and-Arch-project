@@ -71,7 +71,10 @@ push ecx
  mov ecx, GRID_SIZE
  mov dl, 5 ;col
  mov dh, 2 ;row
+ 
+ ;Display the column numbers at the top of the game board
  ColumnLoop:
+
   
  loop ColumnLoop
 
@@ -79,13 +82,12 @@ push ecx
  mov ecx, GRID_SIZE
  RowOuterLoop:
    
+   RowInnerLoop:
+
+   loop RowInnerLoop
 
  loop RowOuterLoop
  
-
-
-
-
  pop ecx
  pop eax
  pop edx
