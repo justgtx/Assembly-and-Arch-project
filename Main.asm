@@ -29,7 +29,10 @@ MAX_MISSES    EQU 3
 	promptRow	BYTE "Enter Row (1-",0
 	promptCol	BYTE "Enter Column (1-",0
 	promptCloseBracket	BYTE "): ",0
+	promptWin BYTE "You Won! Congratulations!",0
+	promptLose Byte"You Lose :( Try Again..?",0
 
+	;user inputs
 	inputRow	DWORD ?
 	inputCol	Dword ?
 
@@ -57,7 +60,11 @@ INVOKE ExitProcess,0
 main ENDP
 
 CheckWinOrLoss PROC
- 
+ call Clrscr
+ mov dl, 10		;column
+ mov dh, 12		;row
+ call Gotoxy	;stage cursor placement for messages
+
  ;check if user is out of errors
  cmp currMisses, 0
  je loseCondition
