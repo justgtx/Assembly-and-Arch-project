@@ -170,5 +170,20 @@ InitGame PROC
    pop ecx
 
    ret
+    jmp hint:
+        ;display hint for 1.5 seconds one and off 3 times
+        mov ecx, 3
+    hintLoop:
+        call Clrscr
+        mov dl, 2
+        mov dh, 2
+        call Gotoxy
+        mov edx, OFFSET promptHint
+        call WriteString
+        mov eax, 1500	;1.5 second delay
+        call Delay
+        dec ecx
+        jnz hintLoop
+        ret
 InitGame ENDP
 END main
