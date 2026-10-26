@@ -127,7 +127,17 @@ push ebx
 	cmp board[edi],3
 	je displayMiss
 
+	displayEmpty:
+	 mov al, '.'
+	 call WriteChar
+	 jmp nextLoopIteration
 
+
+	 nextLoopIteration:
+	 mov al, ' '
+	 call WriteChar
+	 add dl, 2
+	 inc edi
     loop RowInnerLoop
     pop ecx
     inc bl
