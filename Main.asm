@@ -132,6 +132,16 @@ push ebx
 	 call WriteChar
 	 jmp nextLoopIteration
 
+	displayHit:
+	 mov al, 'H'
+	 call WriteChar
+	 jmp nextLoopIteration
+
+	displayMiss:
+	 mov al, 'M'
+	 call WriteChar
+	 jmp nextLoopIteration
+
 
 	 nextLoopIteration:
 	 mov al, ' '
