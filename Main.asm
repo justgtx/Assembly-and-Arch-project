@@ -47,7 +47,7 @@ main PROC
  ;GameLoop will run continuously until the game ends.
  GameLoop:
   
-  ;call RenderBoard			;Render the updated board after last user input
+  call RenderBoard			;Render the updated board after last user input
   ;call GetPlayerInput		;prompt and validate the user's entry
   ;call EvalGuess			;evaluate the user's entry
   ;call waitMsg				;Pauses and prints a proceed screen so use can process last game board state.
@@ -59,6 +59,16 @@ main PROC
 INVOKE ExitProcess,0
 main ENDP
 
+RenderBoard PROC
+ ;render board using similar logic to the one in InitGame Proc
+ ;check board state is looping around
+ ;If 0 - Display " . ", If 1 - Display " . ", If 2 - Display " H ", If 3 - Display " M "
+
+
+ ret
+RenderBoard ENDP
+
+;Check win or loss procedure
 CheckWinOrLoss PROC
 push edx
 push eax
