@@ -64,6 +64,7 @@ call Clrscr
 push edx
 push eax
 push ecx
+push ebx
  ;render board using similar logic to the one in InitGame Proc, implementing again because logic is slightly different
  ;check board state is looping around
  ;If 0 - Display " . ", If 1 - Display " . ", If 2 - Display " H ", If 3 - Display " M "
@@ -89,7 +90,11 @@ push ecx
  loop ColumnLoop
 
  
+ ;build of the grid
  mov ecx, GRID_SIZE
+ mov dl, 2 ;col
+ mov dh, 3 ;row
+ mov bl, 1
  RowOuterLoop:
    
    RowInnerLoop:
@@ -98,6 +103,7 @@ push ecx
 
  loop RowOuterLoop
  
+ pop ebx
  pop ecx
  pop eax
  pop edx
