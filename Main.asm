@@ -107,6 +107,9 @@ push ebx
   mov al, ' '
   call WriteChar
   pop eax
+
+  push ecx
+  mov ecx, GRID_SIZE
   RowInnerLoop:
 	;Game Logic for "0" value
 
@@ -118,7 +121,10 @@ push ebx
 
 
    loop RowInnerLoop
-
+   pop ecx
+  inc bl
+  inc dh
+  mov dl, 2
   loop RowOuterLoop
 
  mov eax, 3000
