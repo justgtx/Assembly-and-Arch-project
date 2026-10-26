@@ -112,12 +112,20 @@ push ebx
   mov ecx, GRID_SIZE
   RowInnerLoop:
 	;Game Logic for "0" value
+	cmp board[edi],0
+	je displayEmpty
 
 	;Game Logic for "1" value
+	cmp board[edi],1
+	je displayEmpty
 	
 	;Game Logic for "2" value
+	cmp board[edi],2
+	je displayHit
 
 	;Game Logic for "3" value
+	cmp board[edi],3
+	je displayMiss
 
 
    loop RowInnerLoop
