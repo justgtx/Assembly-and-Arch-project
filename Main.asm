@@ -43,10 +43,12 @@ main PROC
 
  ;GameLoop will run continuously until the game ends.
  GameLoop:
-  ;call CheckWinOrLoss		;Check for exit state, exit if true
+  
   ;call RenderBoard			;Render the updated board after last user input
   ;call GetPlayerInput		;prompt and validate the user's entry
   ;call EvalGuess			;evaluate the user's entry
+  ;call waitMsg				;Pauses and prints a proceed screen so use can process last game board state.
+  call CheckWinOrLoss		;Check for exit state, exit if true
 
   jmp GameLoop
  
@@ -54,6 +56,11 @@ main PROC
 INVOKE ExitProcess,0
 main ENDP
 
+CheckWinOrLoss PROC
+ 
+
+
+CheckWinOrLoss ENDP
 
 
 ;Seed random numbers into the NxN grid
