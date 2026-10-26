@@ -60,6 +60,7 @@ INVOKE ExitProcess,0
 main ENDP
 
 RenderBoard PROC
+call Clrscr
 push edx
 push eax
 push ecx
@@ -67,11 +68,18 @@ push ecx
  ;check board state is looping around
  ;If 0 - Display " . ", If 1 - Display " . ", If 2 - Display " H ", If 3 - Display " M "
 
+ mov ecx, GRID_SIZE
+ mov dl, 5 ;col
+ mov dh, 2 ;row
  ColumnLoop:
-
+  
+  push ecx
+  mov ecx, GRID_SIZE
   RowLoop:
+   
 
   loop RowLoop
+ pop ecx
 
  loop ColumnLoop
 
