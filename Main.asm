@@ -36,12 +36,10 @@ MAX_MISSES    EQU 3
 
 .code
 main PROC
-call Randomize		;fully randomize the range for later
+ call Randomize		;fully randomize the range for later
  ;game initalization procedures to be built
 					;call promptDifficulty		;To be added later
- ;call RandomizeGrid		;seed the grid with random values
  call InitGame				;place the randomized values on the grid
- ;call ShowPeekOfScreen		;show full displayed board for a few seconds
 
  ;GameLoop will run continuously until the game ends.
  GameLoop:
@@ -55,6 +53,8 @@ call Randomize		;fully randomize the range for later
  
 INVOKE ExitProcess,0
 main ENDP
+
+
 
 ;Seed random numbers into the NxN grid
 InitGame PROC
@@ -132,7 +132,7 @@ InitGame PROC
 	push ecx ;push ecx so it can be saved to iterate after inner loop
 	mov ecx, GRID_SIZE ;GRID_SIZE is row iterator
 	
-	mov dl, 5
+	mov dl, 5 ;reset column to 5 at the start of each new row
     RowInnerLoop: 
 	 call Gotoxy
 
@@ -151,12 +151,12 @@ InitGame PROC
 	 NoDisplayTarget:
 	 mov al, ' '
 	 call WriteChar 
-	 add dl, 2
-	 inc edi
+	 add dl, 2	;inc col value as row moves from left -> right
+	 inc edi	;inc value of board array
 	 loop RowInnerLoop
 
-	mov dl, 2
-	inc bl ;increment row counter
+	mov dl, 2	;set column back for the cilmn value.
+	inc bl ;increment row counter at the beginning of the row 1:, 2:, 3: ...
 	inc dh ;increment terminal row value
 	pop ecx ;pop ecx so it can be used to loop again
    loop RowOuterLoop
