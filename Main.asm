@@ -21,7 +21,7 @@ MAX_MISSES    EQU 3
 
 	;Game variables
 	targetsLeft BYTE TOTAL_TARGETS
-	currMisses BYTE 0
+	missesLeft BYTE MAX_MISSES
 
 	;Space for UI Prompts
 	
@@ -58,13 +58,32 @@ main ENDP
 
 CheckWinOrLoss PROC
  
+ ;check if user is out of errors
+ cmp currMisses, 0
+ je loseCondition
+ cmp targetsLeft, 0
+ je winCondition
+ jmp exitProc
+ ;check if user is out of targets
+
+ ;display nothing if game continues
+
+ winCondition:
 
 
+  jmp exitProc
+ loseCondition:
+
+  jmp exitProc
+
+ exitProc:
+ ret
 CheckWinOrLoss ENDP
 
 
 ;Seed random numbers into the NxN grid
 InitGame PROC
+ mov  missesLeft, MAX_MISSES
  mov ecx, TOTAL_CELLS	;loop for every cell
  xor esi, esi			;set index tracker to 0.
  
