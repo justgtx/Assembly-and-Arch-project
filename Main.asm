@@ -60,13 +60,16 @@ INVOKE ExitProcess,0
 main ENDP
 
 CheckWinOrLoss PROC
+push edx
+push eax
  call Clrscr
- mov dl, 10		;column
- mov dh, 12		;row
+ mov dl, 30		;column
+ mov dh, 13		;row
+ mov eax, 5000	;set delay
  call Gotoxy	;stage cursor placement for messages
 
  ;check if user is out of errors
- cmp currMisses, 0
+ cmp missesLeft, 0
  je loseCondition
  cmp targetsLeft, 0
  je winCondition
@@ -76,14 +79,21 @@ CheckWinOrLoss PROC
  ;display nothing if game continues
 
  winCondition:
-
+  mov edx, OFFSET promptWin
+  call WriteString
+  call delay
 
   jmp exitProc
  loseCondition:
+  mov edx, OFFSET promptLose
+  call WriteString
+  call delay
 
   jmp exitProc
 
  exitProc:
+ pop eax
+ pop edx
  ret
 CheckWinOrLoss ENDP
 
