@@ -33,7 +33,7 @@ MAX_MISSES    EQU 3
 	inputRow	DWORD ?
 	inputCol	Dword ?
 
-
+    game_input_buffer BYTE 10 DUP(?) ; input for user while game plays
 .code
 main PROC
 call Randomize		;fully randomize the range for later
@@ -184,6 +184,30 @@ InitGame PROC
         call Delay
         dec ecx
         jnz hintLoop
+        ret
+    Pick_target: ; ebx should register should hold the target number bh rows and bl should hold the column number
+       cmp board[bl], 1
+       cmp board[bh], 1
+       je Pick_target	
+       ;if a miss dec the counter for misses			
+       ret
+
+    ;
+    ;Input line for game to be played here
+    ;
+    Game:
+        bufferInput:
+            mov edx, OFFSET game_input_buffer
+            call ReadString
+            ret
+    checkInput:
+        ;compare input to expected input
+        cmp game_input_buffer, "H"
+        jz hint
+        cmp game_input_buffer, "h"
+        jz hint
+        jnz Pick_target
+
         ret
 InitGame ENDP
 END main
