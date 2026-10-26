@@ -73,15 +73,15 @@ push ecx
  mov dh, 2 ;row
  ColumnLoop:
   
-  push ecx
-  mov ecx, GRID_SIZE
-  RowLoop:
+ loop ColumnLoop
+
+ 
+ mov ecx, GRID_SIZE
+ RowOuterLoop:
    
 
-  loop RowLoop
- pop ecx
-
- loop ColumnLoop
+ loop RowOuterLoop
+ 
 
 
 
