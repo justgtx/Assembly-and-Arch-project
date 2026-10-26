@@ -74,20 +74,20 @@ push ebx
  mov dh, 2 ;row
  
  ;Display the column numbers at the top of the game board
- ColumnLoop:
+
  call Gotoxy
-   mov bl, 1
-   ColumnLoop:
-    mov al, bl
-	add al, '0'	;convert number to ASCII
-	call WriteChar
-	push eax
-	mov al, ' '
-	call WriteChar
-	pop eax
-	inc bl
+ mov bl, 1
+ ColumnLoop:
+  mov al, bl
+  add al, '0'	;convert number to ASCII
+  call WriteChar
+  push eax
+  mov al, ' '
+  call WriteChar
+  pop eax
+  inc bl
   
- loop ColumnLoop
+  loop ColumnLoop
 
  
  ;build of the grid
@@ -120,7 +120,10 @@ push ebx
    loop RowInnerLoop
 
  loop RowOuterLoop
- 
+
+ mov eax, 3000
+ call Delay
+
  pop ebx
  pop ecx
  pop eax
