@@ -97,7 +97,16 @@ push ebx
  mov bl, 1
  mov edi, 0
  RowOuterLoop:
-   
+   call Gotoxy
+   mov al, bl
+   add al, '0'
+   call WriteChar
+   push eax
+   mov al, ':'
+   call WriteChar
+   mov al, ' '
+   call WriteChar
+   pop eax
    RowInnerLoop:
 	;Game Logic for "0" value
 
