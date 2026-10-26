@@ -74,7 +74,17 @@ push ecx
  
  ;Display the column numbers at the top of the game board
  ColumnLoop:
-
+ call Gotoxy
+   mov bl, 1
+   ColumnLoop:
+    mov al, bl
+	add al, '0'	;convert number to ASCII
+	call WriteChar
+	push eax
+	mov al, ' '
+	call WriteChar
+	pop eax
+	inc bl
   
  loop ColumnLoop
 
