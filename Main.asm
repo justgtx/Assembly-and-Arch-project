@@ -349,7 +349,12 @@ input_Guess_buffery db 4 dup(?) ; clear the buffer for a new input when invalid
 ret:
 check_board:
 ;check if the input is within the board range and there is a target at that position.
+cmp input_Guess_bufferx, GRID_SIZE
+jg clear_buffer ; greater than GRID_SIZE we clear the buffer for a new input
+cmp input_Guess_buffery, GRID_SIZE
+jg clear_buffer ; greater than GRID_SIZE we clear the buffer for a new input
+cmp board[(input_Guess_buffery ) * GRID_SIZE + (input_Guess_bufferx )], 1
+; check which has the targets
+;jmp miss_or_hit
 
-
-
-
+User_Input ENDP
