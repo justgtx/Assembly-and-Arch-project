@@ -35,10 +35,8 @@ MAX_MISSES    EQU 3
 	;user inputs
 	inputRow	DWORD ?
 	inputCol	Dword ?
-    input_Guess_buffer byte 8 dup(?) ;input for user guessing which spot to pick
-
-
-
+    input_Guess_bufferx byte 4 dup(?) ;input for user guessing which spot to pick
+    input_Guess_buffery byte 4 dup(?) ;input for user guessing which spot to pick
 
 .code
 main PROC
@@ -328,20 +326,30 @@ END main
 
 User_Input PROC:
 check_input:
-cmp user_input_buffer, 0
+cmp input_Guess_bufferx, 0
 jz clear_buffer
-cmp user_input_buffer, 'h'
+cmp input_Guess_bufferx, 'h'
 jz handle_hint
-cmp user_input_buffer, 'H'
+cmp input_Guess_bufferx, 'H'
 jz handle_hint
-cmp user_input_buffer, 1
-
-cmp board[edi], 1
+cmp input_Guess_buffery, 0
+jz clear_buffer
+cmp input_Guess_buffery, 'h'
+jz handle_hint
+cmp input_Guess_buffery, 'H'
+jz handle_hint
+; actual valid inputs 
+cmp input_Guess_bufferx, 1
+jge check_board ; greater or equal to 1 we go to check that location
 
 ret
 clear_buffer:
-user_input_buffer db 8 dup(?) ; clear the buffer for a new input when invalid
+input_Guess_bufferx db 4 dup(?) ; clear the buffer for a new input when invalid
+input_Guess_buffery db 4 dup(?) ; clear the buffer for a new input when invalid
 ret:
+check_board:
+;check if the input is within the board range and there is a target at that position.
+
 
 
 
