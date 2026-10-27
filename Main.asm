@@ -35,6 +35,9 @@ MAX_MISSES    EQU 3
 	;user inputs
 	inputRow	DWORD ?
 	inputCol	Dword ?
+    input_Guess_buffer byte 8 dup(?) ;input for user guessing which spot to pick
+
+
 
 
 .code
@@ -322,3 +325,23 @@ InitGame PROC
    ret
 InitGame ENDP
 END main
+
+User_Input PROC:
+check_input:
+cmp user_input_buffer, 0
+jz clear_buffer
+cmp user_input_buffer, 'h'
+jz handle_hint
+cmp user_input_buffer, 'H'
+jz handle_hint
+cmp user_input_buffer, 1
+
+cmp board[edi], 1
+
+ret
+clear_buffer:
+user_input_buffer db 8 dup(?) ; clear the buffer for a new input when invalid
+ret:
+
+
+
