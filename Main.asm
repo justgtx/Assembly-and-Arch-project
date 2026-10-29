@@ -37,7 +37,7 @@ MAX_MISSES    EQU 3
 	inputCol	Dword ?
     input_Guess_bufferx byte 4 dup(?) ;input for user guessing which spot to pick
     input_Guess_buffery byte 4 dup(?) ;input for user guessing which spot to pick
-
+    hint_counter 03h ; number of hints available to the user, 3 by default
 .code
 main PROC
  call Randomize		;fully randomize the range for later
@@ -325,6 +325,13 @@ InitGame ENDP
 END main
 
 User_Input PROC:
+
+clear_buffer:
+input_Guess_bufferx db 4 dup(?) 
+input_Guess_buffery db 4 dup(?) 
+ret:
+
+
 check_input:
 mov dh, OFFSET input_Guess_bufferx
 call ReadString
@@ -361,12 +368,22 @@ cmp board[(input_Guess_bufferx ) * GRID_SIZE + (input_Guess_buffery )], 1
 ; check which has the targets
 ;jmp miss_or_hit
 ret
+
 hint:
+cmp hint_counter, 0
+je clear_buffer ; if no hints left, clear the buffer for a new input
+jne hint_display
+hint_display:; hint function to flash the board for 1.5 seconds and it shows 3 times
 mov ecx,3 
 call Clrscr
 mov dl, 30		;column
 mov dh, 13		;row
-mov eax,1500 
-
+mov eax,1500                                                                     
+call delay  
+dec ecx
+cmp ecx,0   
+jne hint
+dec hint_counter,1
+ret
 
 User_Input ENDP
