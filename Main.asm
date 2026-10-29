@@ -326,18 +326,22 @@ END main
 
 User_Input PROC:
 check_input:
+mov dh, OFFSET input_Guess_bufferx
+call ReadString
+mov dl, OFFSET input_Guess_buffery
+call ReadString
 cmp input_Guess_bufferx, 0
 jz clear_buffer
 cmp input_Guess_bufferx, 'h'
-jz handle_hint
+je hint
 cmp input_Guess_bufferx, 'H'
-jz handle_hint
+je hint
 cmp input_Guess_buffery, 0
-jz clear_buffer
+je clear_buffer
 cmp input_Guess_buffery, 'h'
-jz handle_hint
+je hint
 cmp input_Guess_buffery, 'H'
-jz handle_hint
+je hint
 ; actual valid inputs 
 cmp input_Guess_bufferx, 1
 jge check_board ; greater or equal to 1 we go to check that location
@@ -353,8 +357,16 @@ cmp input_Guess_bufferx, GRID_SIZE
 jg clear_buffer ; greater than GRID_SIZE we clear the buffer for a new input
 cmp input_Guess_buffery, GRID_SIZE
 jg clear_buffer ; greater than GRID_SIZE we clear the buffer for a new input
-cmp board[(input_Guess_buffery ) * GRID_SIZE + (input_Guess_bufferx )], 1
+cmp board[(input_Guess_bufferx ) * GRID_SIZE + (input_Guess_buffery )], 1
 ; check which has the targets
 ;jmp miss_or_hit
+ret
+hint:
+mov ecx,3 
+call Clrscr
+mov dl, 30		;column
+mov dh, 13		;row
+mov eax,1500 
+
 
 User_Input ENDP
