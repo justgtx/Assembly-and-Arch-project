@@ -37,7 +37,7 @@ MAX_MISSES    EQU 3
 	inputCol	Dword ?
     input_Guess_bufferx byte 4 dup(?) ;input for user guessing which spot to pick
     input_Guess_buffery byte 4 dup(?) ;input for user guessing which spot to pick
-    hint_counter 03h ; number of hints available to the user, 3 by default
+    hint_counter BYTE 03h ; number of hints available to the user, 3 by default
 .code
 main PROC
  call Randomize		;fully randomize the range for later
@@ -324,15 +324,16 @@ InitGame PROC
 InitGame ENDP
 END main
 
-User_Input PROC:
+User_Input PROC
 
 clear_buffer:
 input_Guess_bufferx db 4 dup(?) 
 input_Guess_buffery db 4 dup(?) 
-ret:
+ret
 
 
 check_input:
+mov edx, OFFSET input_Guess_bufferx; so readstring can work
 mov dh, OFFSET input_Guess_bufferx
 call ReadString
 mov dl, OFFSET input_Guess_buffery
@@ -354,10 +355,6 @@ cmp input_Guess_bufferx, 1
 jge check_board ; greater or equal to 1 we go to check that location
 
 ret
-clear_buffer:
-input_Guess_bufferx db 4 dup(?) ; clear the buffer for a new input when invalid
-input_Guess_buffery db 4 dup(?) ; clear the buffer for a new input when invalid
-ret:
 check_board:
 ;check if the input is within the board range and there is a target at that position.
 cmp input_Guess_bufferx, GRID_SIZE
