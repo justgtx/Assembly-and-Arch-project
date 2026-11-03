@@ -331,19 +331,6 @@ mov edx, OFFSET input_Guess_bufferx
 mov ecx,3
 call ReadString ; read from ecx then mov it into the stored values to compare
 
-
-clear_buffer:
-mov edi,OFFSET input_Guess_bufferx
-mov ecx,4
-mov al,0
-rep stosb
-mov edi,OFFSET input_Guess_buffery
-mov ecx,4
-mov al,0
-rep stosb
-ret
-
-
 check_input: ; just comparisions 
 cmp input_Guess_bufferx, 0
 jz clear_buffer
@@ -362,6 +349,18 @@ cmp input_Guess_bufferx, 1
 jge check_board ; greater or equal to 1 we go to check that location
 
 ret
+clear_buffer:
+mov edi,OFFSET input_Guess_bufferx
+mov ecx,4
+mov al,0
+rep stosb
+mov edi,OFFSET input_Guess_buffery
+mov ecx,4
+mov al,0
+rep stosb
+ret
+
+
 check_board:
 ;check if the input is within the board range and there is a target at that position.
 cmp input_Guess_bufferx, GRID_SIZE
