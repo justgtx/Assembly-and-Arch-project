@@ -346,6 +346,7 @@ cmp input_Guess_bufferx, 'h'
 je hint
 cmp input_Guess_bufferx, 'H'
 je hint
+
 ;next segment for writing
 mov edx, OFFSET promptCol
 call WriteString
@@ -363,9 +364,7 @@ je hint
 cmp input_Guess_buffery, 'H'
 je hint
 ; actual valid inputs 
-cmp input_Guess_bufferx, 1
-jge check_board ; greater or equal to 1 we go to check that location
-
+jmp check_board ;jump to check_board for data validation, for ranges.
 ret
 
 clear_buffer:
@@ -375,7 +374,7 @@ call Crlf
 mov edi,OFFSET input_Guess_bufferx
 mov ecx,4
 mov al,0
-rep stosb
+rep stosb 
 mov edi,OFFSET input_Guess_buffery
 mov ecx,4
 mov al,0
@@ -386,9 +385,9 @@ ret
 
 check_board:
 ;check if the input is within the board range and there is a target at that position.
-cmp input_Guess_bufferx +1,0 ;fix 1 off error and logic
+cmp BYTE PTR [input_Guess_bufferx + 1],0 ;fix 1 off error and logic
 jne clear_buffer ; greater than GRID_SIZE we clear the buffer for a new input
-cmp input_Guess_buffery,0
+cmp BYTE PTR [input_Guess_buffery + 1],0
 jne clear_buffer ; greater than GRID_SIZE we clear the buffer for a new input
 
 cmp input_Guess_bufferx, '1'
