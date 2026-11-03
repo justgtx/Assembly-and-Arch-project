@@ -443,9 +443,26 @@ ret
 
 User_Input ENDP
 ;check branch name = "Eval"
-;PROC EvalGuess USES eax 
+PROC EvalGuess USES eax 
+mov eax, inputRow
+imul eax, GRID_SIZE
+add eax, inputCol
 
-;EvalGuess ENDP
+cmp board[eax], 1
+je hit
+cmp board[eax], 0
+je miss
+ret
+
+hit:
+mov board[eax], 2 ; mark the hit location
+dec targets_left
+ret
+miss:
+mov board[eax], 3 ; mark the miss location
+dec misses_left
+ret
+EvalGuess ENDP
 
 
 END main
