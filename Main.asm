@@ -443,7 +443,18 @@ ret
 
 User_Input ENDP
 
-PROC EvalGuess USES eax ebx ecx edx edi
+PROC EvalGuess USES eax 
+mov eax, inputRow
+imul eax, GRID_SIZE
+add eax, inputCol
+
+cmp board[eax], 1
+je hit
+cmp board[eax], 0
+je miss
+ret
+
+EvalGuess ENDP
 
 
 END main
