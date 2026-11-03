@@ -454,6 +454,14 @@ cmp board[eax], 0
 je miss
 ret
 
+hit:
+mov board[eax], 2 ; mark the hit location
+dec targets_left
+ret
+miss:
+mov board[eax], 3 ; mark the miss location
+dec misses_left
+ret
 EvalGuess ENDP
 
 
