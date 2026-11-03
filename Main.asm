@@ -52,8 +52,8 @@ main PROC
  GameLoop:
   
   call RenderBoard			;Render the updated board after last user input
-  ;call GetPlayerInput		;prompt and validate the user's entry
-  ;call EvalGuess			;evaluate the user's entry
+  call User_Get_Input		;prompt and validate the user's entry
+  call EvalGuess			;evaluate the user's entry
   ;call waitMsg				;Pauses and prints a proceed screen so use can process last game board state.
   call CheckWinOrLoss		;Check for exit state, exit if true
 
@@ -327,7 +327,7 @@ InitGame PROC
 InitGame ENDP
 
 
-User_Input PROC USES eax ebx ecx edx edi
+User_Get_Input PROC USES eax ebx ecx edx edi
 check_input: ; just comparisions 
 mov edx, OFFSET promptRow
 call WriteString
@@ -368,6 +368,8 @@ jge check_board ; greater or equal to 1 we go to check that location
 
 ret
 
+ENDP User_Get_Input
+
 clear_buffer:
 mov edx,OFFSET promptInvalid
 call WriteString
@@ -383,7 +385,7 @@ rep stosb
 jmp check_input ; to retry input
 ret
 
-
+EvalGuess PROC USES eax ebx ecx edx edi
 check_board:
 ;check if the input is within the board range and there is a target at that position.
 cmp input_Guess_bufferx +1,0 ;fix 1 off error and logic
@@ -433,7 +435,7 @@ cmp ecx,0
 jne hint
 dec hint_counter
 ret
+ENDP EvalGuess
 
-User_Input ENDP
 
 END main
