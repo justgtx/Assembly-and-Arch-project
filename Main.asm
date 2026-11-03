@@ -54,7 +54,7 @@ main PROC
   
   call RenderBoard			;Render the updated board after last user input
   call User_Input		;prompt and validate the user's entry
-  ;call EvalGuess			;evaluate the user's entry
+  call EvalGuess			;evaluate the user's entry
   ;call waitMsg				;Pauses and prints a proceed screen so use can process last game board state.
   call CheckWinOrLoss		;Check for exit state, exit if true
 
@@ -194,18 +194,20 @@ push eax
   mov edx, OFFSET promptWin
   call WriteString
   call delay
+  INVOKE ExitProcess,0 ;exit game
+  ;jmp exitProc
 
-  jmp exitProc
  loseCondition:
   mov edx, OFFSET promptLose
   call WriteString
   call delay
-
-  jmp exitProc
+  INVOKE ExitProcess,0 ;exit game
+  ;jmp exitProc
 
  exitProc:
  pop eax
  pop edx
+ 
  ret
 CheckWinOrLoss ENDP
 
