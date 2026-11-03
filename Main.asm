@@ -367,7 +367,11 @@ cmp input_Guess_bufferx, 1
 jge check_board ; greater or equal to 1 we go to check that location
 
 ret
+
 clear_buffer:
+mov edx,OFFSET promptBad
+call WriteString
+call Crlf
 mov edi,OFFSET input_Guess_bufferx
 mov ecx,4
 mov al,0
@@ -376,6 +380,7 @@ mov edi,OFFSET input_Guess_buffery
 mov ecx,4
 mov al,0
 rep stosb
+jmp check_input ; to retry input
 ret
 
 
