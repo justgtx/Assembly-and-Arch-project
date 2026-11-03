@@ -441,7 +441,7 @@ jne hint
 dec hint_counter
 ret
 
-ENDP User_Input
+User_Input ENDP
 
 PROC EvalGuess USES eax ebx ecx edx edi
 
