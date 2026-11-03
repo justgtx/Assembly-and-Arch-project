@@ -31,6 +31,8 @@ MAX_MISSES    EQU 3
 	promptCloseBracket	BYTE "): ",0
 	promptWin BYTE "You Won! Congratulations!",0
 	promptLose Byte"You Lose :( Try Again..?",0
+    promptHint BYTE "You have used a hint!",0
+    promptInvalid BYTE "Invalid input!",0
 
 	;user inputs
 	inputRow	DWORD ?
@@ -230,7 +232,7 @@ InitGame PROC
   mov ebx, eax
   cmp board[ebx], 1
   je GenRandNum				;'reroll' a new number if board spot is equal to 1
-  mov board[ebx], 1			;place target in spot
+  mov board[ebx], 1			;place target in     spot
 
   pop ecx					;restore outer loop counter
   loop PlaceTargetLoop		;loop until all targets are placed
@@ -322,9 +324,9 @@ InitGame PROC
 
    ret
 InitGame ENDP
-END main
 
-User_Input PROC
+
+User_Input PROC USES eax ebx ecx edx edi
 mov edx, OFFSET input_Guess_bufferx
 mov ecx,3
 call ReadString ; read from ecx then mov it into the stored values to compare
@@ -366,7 +368,15 @@ cmp input_Guess_bufferx, GRID_SIZE
 jg clear_buffer ; greater than GRID_SIZE we clear the buffer for a new input
 cmp input_Guess_buffery, GRID_SIZE
 jg clear_buffer ; greater than GRID_SIZE we clear the buffer for a new input
-cmp board[(input_Guess_bufferx ) * GRID_SIZE + (input_Guess_buffery )], 1
+movzx eax, input_Guess_bufferx
+sub eax, '0'
+dec eax ; convert from 1-based to 0-based index
+imul eax, GRID_SIZE
+movzx ebx, input_Guess_buffery
+sub ebx, '0'
+dec ebx ; convert from 1-based to 0-based index
+add eax, ebx
+cmp board[eax], 1
 ; check which has the targets
 ;jmp miss_or_hit
 ret
@@ -375,8 +385,8 @@ hint:
 cmp hint_counter, 0
 je clear_buffer ; if no hints left, clear the buffer for a new input
 jne hint_display
+mov ecx,3
 hint_display:; hint function to flash the board for 1.5 seconds and it shows 3 times
-mov ecx,3 
 call Clrscr
 mov dl, 30		;column
 mov dh, 13		;row
@@ -389,3 +399,5 @@ dec hint_counter
 ret
 
 User_Input ENDP
+
+END main
