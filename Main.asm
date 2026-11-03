@@ -34,6 +34,7 @@ MAX_MISSES    EQU 3
     promptHint BYTE "You have used a hint!",0
     promptNoHint BYTE "0 hints remaining!",0
     promptInvalid BYTE "Invalid input!",0
+	promptAlreadyGuessed BYTE "That square has already been guessed! Pick another option!",0
 
 	;user inputs
 	inputRow	DWORD ?
@@ -399,7 +400,7 @@ ja clear_buffer
 ;Y row validation for values between '1' and '0' + GRID_SIZE
 ;same logic as X row validation
 cmp input_Guess_buffery, '1'
-ja clear_buffer
+jb clear_buffer
 cmp input_Guess_buffery, '0' + GRID_SIZE
 ja clear_buffer
 
@@ -443,7 +444,7 @@ ret
 
 User_Input ENDP
 ;check branch name = "Eval"
-EvalGuess PROC USES eax 
+EvalGuess PROC USES eax edx
 mov eax, inputRow
 imul eax, GRID_SIZE
 add eax, inputCol
@@ -452,6 +453,11 @@ cmp board[eax], 1
 je hit
 cmp board[eax], 0
 je miss
+
+;tile was already hit (2) or already missed (3)
+mov edx, OFFSET promptAlreadyGuessed
+call WriteString
+call Crlf
 ret
 
 hit:
