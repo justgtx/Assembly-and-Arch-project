@@ -32,6 +32,7 @@ MAX_MISSES    EQU 3
 	promptWin BYTE "You Won! Congratulations!",0
 	promptLose Byte"You Lose :( Try Again..?",0
     promptHint BYTE "You have used a hint!",0
+    promptNoHint BYTE "0 hints remaining!",0
     promptInvalid BYTE "Invalid input!",0
 
 	;user inputs
@@ -327,17 +328,34 @@ InitGame ENDP
 
 
 User_Input PROC USES eax ebx ecx edx edi
+check_input: ; just comparisions 
+mov edx, OFFSET promptRow
+call WriteString
+mov eax, GRID_SIZE
+call WriteDec
+mov edx, OFFSET promptCloseBracket
+call WriteString
 mov edx, OFFSET input_Guess_bufferx
 mov ecx,3
 call ReadString ; read from ecx then mov it into the stored values to compare
 
-check_input: ; just comparisions 
+
 cmp input_Guess_bufferx, 0
 jz clear_buffer
 cmp input_Guess_bufferx, 'h'
 je hint
 cmp input_Guess_bufferx, 'H'
 je hint
+;next segment for writing
+mov edx, OFFSET promptCol
+call WriteString
+mov eax, GRID_SIZE
+call WriteDec
+mov edx, OFFSET promptCloseBracket
+call WriteString
+mov edx, OFFSET input_Guess_buffery
+mov ecx,3
+call ReadString ; read from ecx then mov it into the stored values to compare
 cmp input_Guess_buffery, 0
 je clear_buffer
 cmp input_Guess_buffery, 'h'
@@ -363,10 +381,24 @@ ret
 
 check_board:
 ;check if the input is within the board range and there is a target at that position.
-cmp input_Guess_bufferx, GRID_SIZE
-jg clear_buffer ; greater than GRID_SIZE we clear the buffer for a new input
-cmp input_Guess_buffery, GRID_SIZE
-jg clear_buffer ; greater than GRID_SIZE we clear the buffer for a new input
+cmp input_Guess_bufferx +1,0 ;fix 1 off error and logic
+jne clear_buffer ; greater than GRID_SIZE we clear the buffer for a new input
+cmp input_Guess_buffery,0
+jne clear_buffer ; greater than GRID_SIZE we clear the buffer for a new input
+
+cmp input_Guess_bufferx, '1'
+jb clear_buffer
+cmp input_Guess_buffery, '1'
+jb clear_buffer
+jb clear_buffer
+cmp input_Guess_bufferx, '0' + GRID_SIZE
+ja clear_buffer
+cmp input_Guess_buffery, '0' + GRID_SIZE
+ja clear_buffer
+
+;valid input section
+
+
 movzx eax, input_Guess_bufferx
 sub eax, '0'
 dec eax ; convert from 1-based to 0-based index
