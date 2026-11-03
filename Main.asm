@@ -325,19 +325,24 @@ InitGame ENDP
 END main
 
 User_Input PROC
+mov edx, OFFSET input_Guess_bufferx
+mov ecx,3
+call ReadString ; read from ecx then mov it into the stored values to compare
+
 
 clear_buffer:
-input_Guess_bufferx db 4 dup(?) 
-input_Guess_buffery db 4 dup(?) 
+mov edi,OFFSET input_Guess_bufferx
+mov ecx,4
+mov al,0
+rep stosb
+mov edi,OFFSET input_Guess_buffery
+mov ecx,4
+mov al,0
+rep stosb
 ret
 
 
-check_input:
-mov edx, OFFSET input_Guess_bufferx; so readstring can work
-mov dh, OFFSET input_Guess_bufferx
-call ReadString
-mov dl, OFFSET input_Guess_buffery
-call ReadString
+check_input: ; just comparisions 
 cmp input_Guess_bufferx, 0
 jz clear_buffer
 cmp input_Guess_bufferx, 'h'
@@ -380,7 +385,7 @@ call delay
 dec ecx
 cmp ecx,0   
 jne hint
-dec hint_counter,1
+dec hint_counter
 ret
 
 User_Input ENDP
