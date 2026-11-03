@@ -390,12 +390,15 @@ jne clear_buffer ; greater than GRID_SIZE we clear the buffer for a new input
 cmp BYTE PTR [input_Guess_buffery + 1],0
 jne clear_buffer ; greater than GRID_SIZE we clear the buffer for a new input
 
-cmp input_Guess_bufferx, '1'
-jb clear_buffer
+;X row validation for values between '1' and '0' + GRID_SIZE
+cmp input_Guess_bufferx, '1'		;lower bound ASCII 31h
+jb clear_buffer						;jump if below '1' - 31h
+cmp input_Guess_bufferx, '0' + GRID_SIZE ;upper bound in ASCII
+ja clear_buffer
+
+;Y row validation for values between '1' and '0' + GRID_SIZE
+;same logic as X row validation
 cmp input_Guess_buffery, '1'
-jb clear_buffer
-jb clear_buffer
-cmp input_Guess_bufferx, '0' + GRID_SIZE
 ja clear_buffer
 cmp input_Guess_buffery, '0' + GRID_SIZE
 ja clear_buffer
