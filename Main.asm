@@ -159,8 +159,8 @@ push ebx
     mov dl, 2
   loop RowOuterLoop
 
- mov eax, 3000
- call Delay
+ ;mov eax, 3000
+ ;call Delay
 
  pop ebx
  pop ecx
@@ -403,20 +403,18 @@ ja clear_buffer
 cmp input_Guess_buffery, '0' + GRID_SIZE
 ja clear_buffer
 
-;valid input section
+;valid input section, store in variable inputRow and inputCol for for EvalGuess
 
 
 movzx eax, input_Guess_bufferx
 sub eax, '0'
 dec eax ; convert from 1-based to 0-based index
-imul eax, GRID_SIZE
+mov inputRow, eax
+
 movzx ebx, input_Guess_buffery
 sub ebx, '0'
 dec ebx ; convert from 1-based to 0-based index
-add eax, ebx
-cmp board[eax], 1
-; check which has the targets
-;jmp miss_or_hit
+mov inputCol, ebx
 ret
 
 hint:
