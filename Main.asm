@@ -369,7 +369,7 @@ jge check_board ; greater or equal to 1 we go to check that location
 ret
 
 clear_buffer:
-mov edx,OFFSET promptBad
+mov edx,OFFSET promptInvalid
 call WriteString
 call Crlf
 mov edi,OFFSET input_Guess_bufferx
