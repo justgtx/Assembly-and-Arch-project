@@ -31,7 +31,8 @@ MAX_MISSES    EQU 3
 	promptCloseBracket	BYTE "): ",0
 	promptWin BYTE "You Won! Congratulations!",0
 	promptLose Byte"You Lose :( Try Again..?",0
-    promptHint BYTE "You have used a hint!",0
+    promptHint BYTE "You have used a hint!" ,0
+    promptHint2 BYTE "Hints are remaining!",0
     promptNoHint BYTE "0 hints remaining!",0
     promptInvalid BYTE "Invalid input!",0
 	promptAlreadyGuessed BYTE "That square has already been guessed! Pick another option!",0
@@ -427,13 +428,17 @@ je no_hint ; if no hints left, clear the buffer for a new input
 dec hint_counter
 mov edx, OFFSET promptHint
 call WriteString
+movzx eax, hint_counter
+call WriteDec
+mov edx, OFFSET promptHint2
+call WriteString ; new print message for remaining hints
 call Crlf
 mov eax,800
 call delay
 mov ebx, 3 ; counter for flashes
 
 hint_display:; hint function to flash the board for 1.5 seconds and it shows 3 times
-jmp visual
+call visual
 mov eax,1500 ;1.5 sec wait
 call delay  
 call RenderBoard ;back to normal display
@@ -450,10 +455,11 @@ call Crlf
 mov eax,800
 call delay
 call RenderBoard
-jmp clear_buffer
 jmp check_input
 
-visual:
+User_Input ENDP
+
+visual PROC USES eax ebx ecx edx edi
 call Clrscr
 mov dl,5
 mov dh,2
@@ -518,7 +524,6 @@ call Gotoxy
 ret
 visual ENDP
 
-User_Input ENDP
 ;check branch name = "Eval"
 EvalGuess PROC USES eax edx
 mov eax, inputRow
