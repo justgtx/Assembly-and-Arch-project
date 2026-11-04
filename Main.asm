@@ -453,6 +453,21 @@ call RenderBoard
 jmp clear_buffer
 jmp check_input
 
+visual:
+call Clrscr
+mov dl,5
+mov dh,2
+call Gotoxy
+mov bl,1
+mov ecx,GRID_SIZE
+HintColLoop:
+mov al,bl
+add al, '0'
+call WriteChar
+inc bl
+loop HintColLoop
+
+
 
 User_Input ENDP
 ;check branch name = "Eval"
