@@ -432,23 +432,27 @@ mov eax,800
 call delay
 mov ebx, 3 ; counter for flashes
 
+hint_display:; hint function to flash the board for 1.5 seconds and it shows 3 times
+jmp visual
+mov eax,1500 ;1.5 sec wait
+call delay  
+call RenderBoard ;back to normal display
+mov eax,500
+call Delay
+dec ebx
+jnz hint_display
+jmp check_input
+
 no_hint:
 mov edx, OFFSET promptNoHint
 call WriteString
 call Crlf
+mov eax,800
+call delay
+call RenderBoard
 jmp clear_buffer
-ret
-hint_display:; hint function to flash the board for 1.5 seconds and it shows 3 times
-call Clrscr
-mov dl, 30		;column
-mov dh, 13		;row
-mov eax,1500                                                                     
-call delay  
-dec ecx
-cmp ecx,0   
-jne hint
-dec hint_counter
-ret
+jmp check_input
+
 
 User_Input ENDP
 ;check branch name = "Eval"
