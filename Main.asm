@@ -467,6 +467,20 @@ call WriteChar
 inc bl
 loop HintColLoop
 
+mov ecx,GRID_SIZE
+mov dl,2
+mov dh,3
+mov bl,1
+xor edi,edi
+HintRowLoop:
+call Gotoxy
+mov al,bl
+add al, '0'
+call WriteChar
+mov al, ':'
+call WriteChar
+mov al, ' '
+call WriteChar
 
 
 User_Input ENDP
