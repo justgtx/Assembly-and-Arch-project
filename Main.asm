@@ -190,6 +190,7 @@ push eax
  ;display nothing if game continues
 
  winCondition:
+ inc hint_counter
   mov edx, OFFSET promptWin
   call WriteString
   call delay
