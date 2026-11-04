@@ -482,6 +482,19 @@ call WriteChar
 mov al, ' '
 call WriteChar
 
+push ecx
+mov ecx,GRID_SIZE
+
+HintCellLoop:
+mov al, '.'
+cmp board[edi], 1
+jne notTarget
+mov al, '*'
+jmp putChar
+notTarget:
+cmp board[edi], 2
+jne notHit
+mov al, 'H'
 
 User_Input ENDP
 ;check branch name = "Eval"
