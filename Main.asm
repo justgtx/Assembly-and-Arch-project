@@ -191,6 +191,7 @@ push eax
  ;display nothing if game continues
 
  winCondition:
+ inc hint_counter
   mov edx, OFFSET promptWin
   call WriteString
   call delay
@@ -423,8 +424,13 @@ ret
 hint:
 cmp hint_counter, 0
 je no_hint ; if no hints left, clear the buffer for a new input
-jne hint_display
-mov ecx,3
+dec hint_counter
+mov edx, OFFSET promptHint
+call WriteString
+call Crlf
+mov eax,800
+call delay
+mov ebx, 3 ; counter for flashes
 
 no_hint:
 mov edx, OFFSET promptNoHint
