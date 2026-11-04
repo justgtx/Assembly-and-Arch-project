@@ -31,9 +31,11 @@ MAX_MISSES    EQU 3
 	promptCloseBracket	BYTE "): ",0
 	promptWin BYTE "You Won! Congratulations!",0
 	promptLose Byte"You Lose :( Try Again..?",0
-    promptHint BYTE "You have used a hint!",0
+    promptHint BYTE "You have used a hint!" ,0
+    promptHint2 BYTE "Hints are remaining!",0
     promptNoHint BYTE "0 hints remaining!",0
     promptInvalid BYTE "Invalid input!",0
+	promptAlreadyGuessed BYTE "That square has already been guessed! Pick another option!",0
 
 	;user inputs
 	inputRow	DWORD ?
@@ -53,7 +55,7 @@ main PROC
   
   call RenderBoard			;Render the updated board after last user input
   call User_Input		;prompt and validate the user's entry
-  ;call EvalGuess			;evaluate the user's entry
+  call EvalGuess			;evaluate the user's entry
   ;call waitMsg				;Pauses and prints a proceed screen so use can process last game board state.
   call CheckWinOrLoss		;Check for exit state, exit if true
 
@@ -159,8 +161,8 @@ push ebx
     mov dl, 2
   loop RowOuterLoop
 
- mov eax, 3000
- call Delay
+ ;mov eax, 3000
+ ;call Delay
 
  pop ebx
  pop ecx
@@ -194,18 +196,20 @@ push eax
   mov edx, OFFSET promptWin
   call WriteString
   call delay
+  INVOKE ExitProcess,0 ;exit game
+  ;jmp exitProc
 
-  jmp exitProc
  loseCondition:
   mov edx, OFFSET promptLose
   call WriteString
   call delay
-
-  jmp exitProc
+  INVOKE ExitProcess,0 ;exit game
+  ;jmp exitProc
 
  exitProc:
  pop eax
  pop edx
+ 
  ret
 CheckWinOrLoss ENDP
 
@@ -347,6 +351,7 @@ cmp input_Guess_bufferx, 'h'
 je hint
 cmp input_Guess_bufferx, 'H'
 je hint
+
 ;next segment for writing
 mov edx, OFFSET promptCol
 call WriteString
@@ -364,9 +369,7 @@ je hint
 cmp input_Guess_buffery, 'H'
 je hint
 ; actual valid inputs 
-cmp input_Guess_bufferx, 1
-jge check_board ; greater or equal to 1 we go to check that location
-
+jmp check_board ;jump to check_board for data validation, for ranges.
 ret
 
 clear_buffer:
@@ -376,7 +379,7 @@ call Crlf
 mov edi,OFFSET input_Guess_bufferx
 mov ecx,4
 mov al,0
-rep stosb
+rep stosb 
 mov edi,OFFSET input_Guess_buffery
 mov ecx,4
 mov al,0
@@ -387,66 +390,166 @@ ret
 
 check_board:
 ;check if the input is within the board range and there is a target at that position.
-cmp input_Guess_bufferx +1,0 ;fix 1 off error and logic
+cmp BYTE PTR [input_Guess_bufferx + 1],0 ;fix 1 off error and logic
 jne clear_buffer ; greater than GRID_SIZE we clear the buffer for a new input
-cmp input_Guess_buffery,0
+cmp BYTE PTR [input_Guess_buffery + 1],0
 jne clear_buffer ; greater than GRID_SIZE we clear the buffer for a new input
 
-cmp input_Guess_bufferx, '1'
-jb clear_buffer
+;X row validation for values between '1' and '0' + GRID_SIZE
+cmp input_Guess_bufferx, '1'		;lower bound ASCII 31h
+jb clear_buffer						;jump if below '1' - 31h
+cmp input_Guess_bufferx, '0' + GRID_SIZE ;upper bound in ASCII
+ja clear_buffer
+
+;Y row validation for values between '1' and '0' + GRID_SIZE
+;same logic as X row validation
 cmp input_Guess_buffery, '1'
 jb clear_buffer
-jb clear_buffer
-cmp input_Guess_bufferx, '0' + GRID_SIZE
-ja clear_buffer
 cmp input_Guess_buffery, '0' + GRID_SIZE
 ja clear_buffer
 
-;valid input section
+;valid input section, store in variable inputRow and inputCol for for EvalGuess
 
 
 movzx eax, input_Guess_bufferx
 sub eax, '0'
 dec eax ; convert from 1-based to 0-based index
-imul eax, GRID_SIZE
+mov inputRow, eax
+
 movzx ebx, input_Guess_buffery
 sub ebx, '0'
 dec ebx ; convert from 1-based to 0-based index
-add eax, ebx
-cmp board[eax], 1
-; check which has the targets
-;jmp miss_or_hit
+mov inputCol, ebx
 ret
 
 hint:
 cmp hint_counter, 0
 je no_hint ; if no hints left, clear the buffer for a new input
-jne hint_display
-mov ecx,3
+dec hint_counter
+mov edx, OFFSET promptHint
+call WriteString
+movzx eax, hint_counter
+call WriteDec
+mov edx, OFFSET promptHint2
+call WriteString ; new print message for remaining hints
+call Crlf
+mov eax,800
+call delay
+mov ebx, 3 ; counter for flashes
+
+hint_display:; hint function to flash the board for 1.5 seconds and it shows 3 times
+call visual
+mov eax,1500 ;1.5 sec wait
+call delay  
+call RenderBoard ;back to normal display
+mov eax,500
+call Delay
+dec ebx
+jnz hint_display
+jmp check_input
 
 no_hint:
 mov edx, OFFSET promptNoHint
 call WriteString
 call Crlf
-jmp clear_buffer
-ret
-hint_display:; hint function to flash the board for 1.5 seconds and it shows 3 times
-call Clrscr
-mov dl, 30		;column
-mov dh, 13		;row
-mov eax,1500                                                                     
-call delay  
-dec ecx
-cmp ecx,0   
-jne hint
-dec hint_counter
-ret
+mov eax,800
+call delay
+call RenderBoard
+jmp check_input
 
 User_Input ENDP
-;check branch name = "Eval"
-;PROC EvalGuess USES eax 
 
-;EvalGuess ENDP
+visual PROC USES eax ebx ecx edx edi
+call Clrscr
+mov dl,5
+mov dh,2
+call Gotoxy
+mov bl,1
+mov ecx,GRID_SIZE
+HintColLoop:
+mov al,bl
+add al, '0'
+call WriteChar
+inc bl
+loop HintColLoop
+
+mov ecx,GRID_SIZE
+mov dl,2
+mov dh,3
+mov bl,1
+xor edi,edi
+HintRowLoop:
+call Gotoxy
+mov al,bl
+add al, '0'
+call WriteChar
+mov al, ':'
+call WriteChar
+mov al, ' '
+call WriteChar
+
+push ecx
+mov ecx,GRID_SIZE
+
+HintCellLoop:
+mov al, '.'
+cmp board[edi], 1
+jne notTarget
+mov al, '*'
+jmp putChar
+notTarget:
+cmp board[edi], 2
+jne notHit
+mov al, 'H'
+jmp putChar
+notHit:
+cmp board[edi], 3
+jne putChar
+mov al, 'M'
+putChar:
+call WriteChar
+mov al, ' '
+call WriteChar
+inc edi
+loop HintCellLoop
+pop ecx
+inc bl
+inc dh
+loop HintRowLoop
+
+mov dl,0
+
+mov dh,GRID_SIZE +5
+call Gotoxy
+ret
+visual ENDP
+
+;check branch name = "Eval"
+EvalGuess PROC USES eax edx
+mov eax, inputRow
+imul eax, GRID_SIZE
+add eax, inputCol
+
+cmp board[eax], 1
+je hit
+cmp board[eax], 0
+je miss
+
+;tile was already hit (2) or already missed (3)
+mov edx, OFFSET promptAlreadyGuessed
+call WriteString
+call Crlf
+ret
+
+hit:
+mov board[eax], 2 ; mark the hit location
+dec targetsLeft
+ret
+miss:
+mov board[eax], 3 ; mark the miss location
+dec missesLeft
+ret
+EvalGuess ENDP
 
 
 END main
