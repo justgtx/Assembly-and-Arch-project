@@ -495,6 +495,28 @@ notTarget:
 cmp board[edi], 2
 jne notHit
 mov al, 'H'
+jmp putChar
+notHit:
+cmp board[edi], 3
+jne putChar
+mov al, 'M'
+putChar:
+call WriteChar
+mov al, ' '
+call WriteChar
+inc edi
+loop HintCellLoop
+pop ecx
+inc bl
+inc dh
+loop HintRowLoop
+
+mov dl,0
+
+mov dh,GRID_SIZE +5
+call Gotoxy
+ret
+visual ENDP
 
 User_Input ENDP
 ;check branch name = "Eval"
